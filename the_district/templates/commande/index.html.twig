@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="visuel">
+
+        <div class="col-12 d-flex justify-content-center my-5">
+
+            <h1><strong>Confirmation de votre commande</strong></h1>
+
+        </div>
+        
+        <div class="row">
+
+
+            {#######################################################################################
+                ~~~~~~~~~~~~~~~~~~~~~~~~       FORMULAIRE DE COMMANDE       ~~~~~~~~~~~~~~~~~~~
+            ########################################################################################}
+
+
+            <div class="col-9">
+
+                <h3 class="text-center">Formulaire de Commande</h3>
+
+                <div class="row justify-content-center">
+
+                    <div class="col-5">
+
+                        {{ form_start(form) }}
+
+                            <div class="form-group my-5">
+
+                                {{ form_label(form.livraison, "Adresse de livraison") }}
+                                {{ form_widget(form.livraison, {'attr': {'class': 'form-control'}}) }} 
+
+                            </div>
+
+                            <div class="form-group mt-5">
+
+                                {{ form_label(form.facturation, "Adresse de facturation") }}
+                                {{ form_widget(form.facturation, {'attr': {'class': 'form-control'}}) }} 
+
+                            </div>
+
+                            <div class="form-group mt-2">
+
+                                {{ form_label(form.memeAdresse, "Les adresses sont identiques") }}
+                                {{ form_widget(form.memeAdresse, {'attr': {'class': 'form-check-input'}}) }} 
+
+                            </div>
+
+                            <div class="form-group my-5">
+
+                                {{ form_label(form.payement1, "Carte bancaire") }}
+                                {{ form_widget(form.payement1, {'attr': {'class': 'form-check-input'}}) }} 
+
+                            </div>
+
+                            <div class="form-group my-5">
+
+                                {{ form_label(form.payement2, "Paypal") }}
+                                {{ form_widget(form.payement2, {'attr': {'class': 'form-check-input'}}) }}
+
+                            </div>
+
+                            <div class="form-group my-5">
+
+                                {{ form_label(form.agree, "J'accepte les CGU") }}
+                                {{ form_widget(form.agree, {'attr': {'class': 'form-check-input'}}) }} 
+
+                            </div>
+
+                            <button href="{{ path('app_finaliser') }}" class="btn btn-light btn-lg zoom btns">Envoyer</button>
+
+                        {{ form_end(form) }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-3 d-flex justify-content-end">
+
+
+                {#######################################################################################
+                    ~~~~~~~~~~~~~~~~~~~~~~~~       RÉCAPITULATIF DE COMMANDE       ~~~~~~~~~~~~~~~~~
+                ########################################################################################}
+                
+
+                <div class="card card-body bg col-3 d-flex justify-content-end">
+
+                    <h5 class="card-header">Récapitulatif de commande</h5>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            {% for element in data %}
+
+                                <div class="col-3 mb-1">
+
+                                    <img src="food/{{ element.platUnite.image }}" alt="{{ element.platUnite.libelle }}" style="width: 100px;">
+
+                                </div>
+
+                                <div class="col-8 d-flex justify-content-end mt-3">
+
+                                    <p>{{ element.platUnite.libelle }} x {{ element.quantity }} = {{ element.prix }} €</p>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <p class="text-end mt-2">Total de la commande : {{ total }} €</p>
+
+                        <a href="{{ path('app_plat') }}" class="btn btn-light btn-lg zoom btns">Ajouter un plat</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

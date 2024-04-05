@@ -1,0 +1,59 @@
+##################################################################################################################
+# CONFIGURATION, CHARGEMENTS EST GESTIONS DES SERVICES + INJECTION DES DÉPENDANCES DANS CONTROLLER
+##################################################################################################################
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+
+    ###########################################
+    # CONFIGURATION PAR DÉFFAUT DES SERVICES. #
+    ###########################################
+    _defaults:
+        # Activer l'autowiring, ce qui signifie que Symfony injectera automatiquement les dépendances dans vos services sans que vous ayez besoin de les préciser.
+        autowire: true 
+        # Active l'autoconfiguration, ce qui signifie que Symfony enregistrera automatiquement vos services en tant que commandes, écouteurs d'événements, etc.     
+        autoconfigure: true 
+
+    ############################
+    # CONFIGURATION CONTROLLER # 
+    ############################
+    App\Controller\PanierController:
+        # Spécifier les arguments à injecter dans le constructeur du contrôleur.
+        arguments:
+            # Injecter le service PlatRepository dans le contrôleur en tant qu'argument nommé $platRepo.
+            $platRepo: '@App\Repository\PlatRepository'
+            # Injecter le service de session dans le contrôleur en tant qu'argument nommé $session.
+            $session: '@session'
+
+    ########################################################################################
+    # DÉCLARATIONS DES CLASSES DANS NAMESPACE PEUVENT ÊTRE UTILISÉES EN TANT QUE SERVICES. #
+    ########################################################################################
+    App\:
+        # Spécifiez le chemin vers le répertoire contenant vos classes dans l'espace de noms App\.
+        resource: '../src/'
+        # Spécifique aux répertoires ou fichiers à exclure lors de la configuration des services.
+        exclude:
+            # Indiquer que le répertoire DependencyInjectionsitué dans le répertoire src sera exclu de la configuration des services. 
+            - '../src/DependencyInjection/'
+            # Actuellement ignorée. Elle suggère d'exclure également le répertoire Entitysitué dans le répertoire srcde la configuration des services. 
+            # - '../src/Entity/'
+            # Indiquer que le fichier Kernel.phpsitué dans le répertoire srcsera exclu de la configuration des services. 
+            - '../src/Kernel.php'
+
+    # App\EventSubscriber\CommandeSubscriber:
+    #     arguments:
+    #         $mailer: '@Symfony\Component\Mailer\MailerInterface'
+    #     tags: [doctrine.event_subscriber]
+
+    App\EventSubscriber\CommandeSubscriber:
+        arguments:
+            $security: '@Symfony\Bundle\SecurityBundle\Security'
+        tags: [doctrine.event_subscriber]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    
